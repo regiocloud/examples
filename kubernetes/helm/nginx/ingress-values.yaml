@@ -1,0 +1,11 @@
+controller:
+  allowSnippetAnnotations: true
+  podLabels:
+    app: nginx-ingress
+    component: controller
+  extraArgs:
+    enable-ssl-passthrough: ""
+  config:
+    use-http2: true
+  service:
+    type: "LoadBalancer"
