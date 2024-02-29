@@ -1,0 +1,5 @@
+auth:
+  postgresPassword: password
+  username: n8nuser
+  password: password
+  database: n8ndb

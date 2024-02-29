@@ -1,0 +1,20 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: cnpg-db
+  namespace: cnpg
+spec:
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.2
+  instances: 3
+  storage:
+    size: 1Gi
+
+  superuserSecret:
+    name: cnpg-superuser
+
+  bootstrap:
+    initdb:
+      database: appdb
+      owner: user
+      secret:
+        name: cnpg-app-user

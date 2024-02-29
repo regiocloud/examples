@@ -1,0 +1,31 @@
+n8n:
+  # pwgen -s 64 1
+  encryption_key: fAeXGuoOafqlnIsxxyelGyY92XfIXEak1is3LZCRuWL7aDo5BuR72zm9ctDSoDsR
+
+config:
+  database:
+    type: postgresdb
+    postgresdb:
+      database: n8ndb
+      host: postgresql
+      password: password
+      user: n8nuser
+  generic:
+    timezone: Europe/Berlin
+
+persistence:
+  enabled: true
+  size: 1Gi
+
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: n8n.example.domain
+      paths: [/]
+  tls:
+    - secretName: n8n-tls
+      hosts:
+        - n8n.example.domain
+  className: nginx
