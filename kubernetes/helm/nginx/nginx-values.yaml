@@ -1,5 +1,5 @@
 cloneStaticSiteFromGit:
   enabled: true
-  repository: "https://github.com/regiocloud/sample-website"
+  repository: "https://github.com/regiocloud/example-website"
   branch: "main"
   interval: 3600
