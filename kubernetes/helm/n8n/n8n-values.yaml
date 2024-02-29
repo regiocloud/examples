@@ -17,6 +17,9 @@ persistence:
   enabled: true
   size: 1Gi
 
+image:
+  repository: docker.n8n.io/n8nio/n8n
+
 ingress:
   enabled: true
   annotations:
