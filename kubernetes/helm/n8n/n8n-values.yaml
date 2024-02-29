@@ -25,10 +25,10 @@ ingress:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
   hosts:
-    - host: n8n.example.domain
+    - host: n8n.example.regio.digital
       paths: [/]
   tls:
     - secretName: n8n-tls
       hosts:
-        - n8n.example.domain
+        - n8n.example.regio.digital
   className: nginx
