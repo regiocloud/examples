@@ -1,0 +1,16 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: nginx
+  namespace: nginx
+spec:
+  values:
+    ingress:
+      enabled: true
+      pathType: ImplementationSpecific
+      hostname: nginx.regio.digital
+      path: /
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-prod
+      ingressClassName: nginx
+      tls: true
