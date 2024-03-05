@@ -8,7 +8,7 @@ spec:
     ingress:
       enabled: true
       pathType: ImplementationSpecific
-      hostname: nginx.regio.digital
+      hostname: nginx-flux.<IP>.nip.io
       path: /
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-prod
