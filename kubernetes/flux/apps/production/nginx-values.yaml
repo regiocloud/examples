@@ -5,10 +5,12 @@ metadata:
   namespace: nginx
 spec:
   values:
+    service:
+      type: ClusterIP
     ingress:
       enabled: true
       pathType: ImplementationSpecific
-      hostname: nginx-flux.<IP>.nip.io
+      hostname: nginx-flux.81.163.193.25.nip.io
       path: /
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-prod
