@@ -25,8 +25,40 @@ flux bootstrap github \
   --branch=main \
   --path=kubernetes/flux/clusters/production
 ```
+As soon as the command has been executed, flux and all components from the path are rolled out on the cluster.
 
-As soon as the command has been executed, flux and all components from the path are rolled out on the cluster. A deploy key is created in the repo itself so that flux can work with the repo via SSH in the future.
+Alternatively, you can also add the following part to the shoot config and save it. The shoot will then reconcile and install flux and the specified repo:
+
+```yaml
+...
+spec:
+  ...
+  extensions:
+    - type: shoot-flux
+      providerConfig:
+        apiVersion: flux.extensions.gardener.cloud/v1alpha1
+        kind: FluxConfig
+        flux:
+          version: v2.2.3
+          registry: ghcr.io/fluxcd
+          namespace: flux-system
+        source:
+          template:
+            apiVersion: source.toolkit.fluxcd.io/v1
+            kind: GitRepository
+            spec:
+              ref:
+                branch: main
+              url: https://github.com/regiocloud/examples
+        kustomization:
+          template:
+            apiVersion: kustomize.toolkit.fluxcd.io/v1
+            kind: Kustomization
+            spec:
+              path: kubernetes/flux/clusters/production
+```
+
+To get the Pulbic IP, you can run the following command and see the Public IP in the `External-IP` column:
 
 ``` shell
 kubectl get svc --namespace ingress-nginx
