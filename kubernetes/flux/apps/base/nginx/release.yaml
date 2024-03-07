@@ -9,8 +9,8 @@ spec:
     spec:
       chart: nginx
       sourceRef:
-        kind: OCIRepository
-        name: nginx
+        kind: HelmRepository
+        name: bitnami
   interval: 50m
   install:
     remediation:
