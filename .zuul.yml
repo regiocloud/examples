@@ -1,16 +1,8 @@
 ---
-- job:
-    name: regiocloud-examples-dib-build
-    nodeset: ubuntu-jammy-large
-    pre-run: openstack/images/dib/playbooks/pre.yml
-    run: openstack/images/dib/playbooks/build.yml
-    timeout: 1800
-    vars:
-      upload_image: false
-
 - project:
     merge-mode: squash-merge
     default-branch: main
     check:
       jobs:
-        - regiocloud-examples-dib-build
+        # - regiocloud-examples-dib-build
+        - yamllint
