@@ -22,7 +22,7 @@
             vm ubuntu regiocloud-example-image
 
           qemu-img info regiocloud-example-image.qcow2
-          sha256sum regiocloud-example-image.qcow2 > regiocloud-example-image.CHECKSUM
+          sha256sum regiocloud-example-image.qcow2 > regiocloud-example-image.qcow2.CHECKSUM
 
     - name: Run upload script
       ansible.builtin.shell:

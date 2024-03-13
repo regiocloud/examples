@@ -35,7 +35,7 @@
       upload_image: false
     files:
       - '^.zuul.yaml$'
-      - '^openstack\/images\dib/\/[^\/]*$'
+      - '^openstack\/images\/dib\/.*$'
 
 - job:
     name: regiocloud-examples-dib-publish
