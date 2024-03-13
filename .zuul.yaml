@@ -1,4 +1,30 @@
 ---
+- secret:
+    name: SECRET_REGIOCLOUD_EXAMPLES
+    data:
+      MINIO_ACCESS_KEY: !encrypted/pkcs1-oaep
+        - yLCz9qi4Oa+1Bss8NW0AAVgCbJRn+w67hcCxGUcpgt5fUPTJhvAm+hUqOxofOFoTZ2WEo
+          JK06ubEl1pXG7asI2HMK/FebddMopcC2nTXLokJSNWjEFj2KZemumPEseHd6FE+VKMBp6
+          iaaCqYUZHWk5ftjsiQLEG/F3i2nViltT+mhlpgQqF9+wZbZSDt9tskPEk0k8AWJ3gGsRQ
+          cGZD080ozduDKkIVaLQTXHxM78mqRNhiCHvlT/DRxO8mz0rYb/CCgqbi2yRuioWnhqW2b
+          hsBw+NmCLnB95qJzb7CIs87ODIr0jL/p2Jmq2WgfMzYqiAaJGcGPHw851kMIG0bVUVQhU
+          CXuOl7eEiAsoIWrWeoLiJUQAJq7K38Ww/0QvWa5AhUY99CZJ/DxTHVoTEiAtmYrCaxJPm
+          Hms116AoSd0HBJ/ij927sgjsOR0wT8w7t1oc+anfyJ8oSeEu8gAncZfktsszb5oGe3aeW
+          aZYoSCja81/jDy9pCWoU6sKuk1AcdGqRe0PwqmzryDWTJuTaHq2AmajmEJYY1FLkr860P
+          R/McflsMSfmw9MeAuYw+bhoPgaeyHPXAjXa+MENMNX9TJ7vno4vUWfaOkYh9w5sK2FunI
+          dp4E5xlHXIttHOUOUV6VJuKM5Q6ITh2xuVuKyGSmH5R5tOifJINbbPMqJQOpUI=
+      MINIO_SECRET_KEY: !encrypted/pkcs1-oaep
+        - HkhGs8TzxTsWEf967y6h2y/PxDgbXoExwOi+eel7/3wjfSCH59RoncNzjGbch1ugVoyD6
+          n9H0BEMBqOLDCwvhVhd8EZjo+oVPny0XZWOZ1W+yQRhVbSM3ilVDvXGXKlNyshdUS7yO3
+          1aSQBVVyoJ00V/Si0CxByoI0M6jgw11/kalK84YSZq0CWzEyNzOEsxYRYCJ5sGDGKuedX
+          /UBrbIAIe87/PamKG/ODfzIu5TPkZVEPFf3ozHM5AW14gYZ/eYXcvzHRDbbrn+aWa9Pl0
+          9QGBGTXBpSeDz8UeNeTki+KVRQGic7Ud0LvjvcIvRPk6pqhPubBwH/sW36NnqbFstbcVx
+          4gRaZlxbw+Z68mqNQOfd2TxgKhSWz7kMhkgd1+4Z8GFKk5AP7elhSaPOSbJr7m6K3B5WO
+          HYQuaiIby5+uvrEavyQW8LFWofWPLj13rN4szqUJBxNuZDUrRi24NEGKQfXz+BHddKeJ1
+          vXy7p0BJ9lQbHJa8ZxlpW7OFHFN0Z18STWG6BOPOgpuxq8t5MyfKXCFf9Uz8u9BWHeOO7
+          CyBNlnEmrED0GmTR1guwhT1zekYK/ZzDAsEmu5iE9EotxGvdsFzD3ZJrIa/QiPd2z3Jd7
+          siRCV8syZaLR2ta+sjyfyZGQmaE4IrS3adHGPSu7BZvNOrygYiEN4g4GZei/Us=
+
 - job:
     name: regiocloud-examples-dib-build
     nodeset: ubuntu-jammy-large
@@ -11,9 +37,23 @@
       - '^.zuul.yaml$'
       - '^openstack\/images\dib/\/[^\/]*$'
 
+- job:
+    name: regiocloud-examples-dib-publish
+    parent: regiocloud-examples-dib-build
+    vars:
+      upload_image: true
+    secrets:
+      - name: minio
+        secret: SECRET_REGIOCLOUD_EXAMPLES
+        pass-to-parent: true
+
 - project:
     merge-mode: squash-merge
     default-branch: main
     check:
       jobs:
         - regiocloud-examples-dib-build
+    post:
+      jobs:
+        - regiocloud-examples-dib-publish:
+            branches: main
