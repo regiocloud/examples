@@ -1,0 +1,38 @@
+---
+- name: Build image
+  hosts: all
+
+  tasks:
+    - name: Run build script
+      ansible.builtin.shell:
+        executable: /bin/bash
+        chdir: "{{ zuul.project.src_dir }}/openstack/images/dib"
+        cmd: |
+          set -e
+          set -x
+          export PATH=/home/zuul/.local/bin:$PATH
+          export ELEMENTS_PATH=./elements
+          export DIB_CLOUD_INIT_DATASOURCES="ConfigDrive, OpenStack"
+          export DIB_RELEASE=jammy
+
+          disk-image-create \
+            -a amd64 \
+            -o regiocloud-example-image \
+            --image-size 8 \
+            vm ubuntu regiocloud-example-image
+
+          qemu-img info regiocloud-example-image.qcow2
+          sha256sum regiocloud-example-image.qcow2 > regiocloud-example-image.CHECKSUM
+
+    # - name: Run upload script
+    #   ansible.builtin.shell:
+    #     executable: /bin/bash
+    #     chdir: "{{ zuul.project.src_dir }}/openstack/images/dib"
+    #     cmd: |
+    #       wget https://dl.min.io/client/mc/release/linux-amd64/mc
+    #       chmod +x mc
+    #       ./mc alias set minio https://swift.services.a.regiocloud.tech {{ minio.MINIO_ACCESS_KEY | trim }} {{ minio.MINIO_SECRET_KEY | trim }}
+    #       ./mc cp regiocloud-example-image.qcow2 minio/regiocloud-example-image
+    #       ./mc cp regiocloud-example-image.qcow2.CHECKSUM minio/regiocloud-example-image
+    #   when: upload_image|bool
+    #   no_log: true
