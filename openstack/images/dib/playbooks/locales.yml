@@ -1,0 +1,33 @@
+# source: https://stackoverflow.com/questions/52421542/ansible-debconf-module-not-working-properly-to-set-default-locale
+---
+- name: Generate locales and set default locale
+  hosts: localhost
+  connection: local
+
+  vars:
+    locales_generated:
+      - en_US.UTF-8
+    locales_default: en_US.UTF-8
+
+  tasks:
+    - name: Select locales to be generated
+      locale_gen:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ locales_generated }}"
+      notify: Reconfigure locales
+
+    - name: Set default locale
+      lineinfile:
+        dest: "/etc/default/locale"
+        regexp: "^LANG="
+        line: "LANG={{ locales_default }}"
+      notify: Reconfigure locales
+
+    - name: Update locale
+      command: update-locale LANG={{ locales_default }} LC_CTYPE={{ locales_default }}
+
+  handlers:
+    - name: Reconfigure locales
+      command: dpkg-reconfigure -f noninteractive locales
+

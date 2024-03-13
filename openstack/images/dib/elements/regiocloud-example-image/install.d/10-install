@@ -1,0 +1,21 @@
+#!/bin/bash
+
+if [ ${DIB_DEBUG_TRACE:-0} -gt 0 ]; then
+    set -x
+fi
+set -eu
+set -o pipefail
+
+# In order to install Ansible from the PPA correctly, you must set the
+# locales beforehand. Since we are also doing this via Ansible, we will
+# install Ansible from the distribution once and then remove it so that
+# Ansible can be installed from the PPA afterwards.
+
+apt-get install --yes ansible python3-pip
+ansible-playbook -i localhost, /tmp/in_target.d/locales.yml
+rm -rf /root/.ansible
+apt-get remove --yes ansible
+apt-get autoremove --yes
+
+# install ansible from pypi
+pip3 install --no-cache-dir 'ansible-core>=2.16.0,<2.17.0'
