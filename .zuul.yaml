@@ -7,6 +7,9 @@
     timeout: 1800
     vars:
       upload_image: false
+    files:
+      - '^.zuul.yaml$'
+      - '^openstack\/images\dib/\/[^\/]*$'
 
 - project:
     merge-mode: squash-merge
