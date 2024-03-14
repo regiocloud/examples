@@ -18,3 +18,11 @@
 
           sudo apt-get update
           sudo apt-get install -y lftp kpartx qemu-utils squashfs-tools
+
+    - name: Write clouds.yaml file
+      ansible.builtin.copy:
+        content: "{{ secret.CLOUDS }}"
+        dest: "{{ zuul.project.src_dir }}/openstack/images/dib/clouds.yaml"
+        mode: 0600
+      when: upload_image|bool
+      no_log: true

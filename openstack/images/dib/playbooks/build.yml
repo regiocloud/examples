@@ -2,6 +2,9 @@
 - name: Build image
   hosts: all
 
+  vars:
+    cloud: openstack
+
   tasks:
     - name: Run build script
       ansible.builtin.shell:
@@ -31,8 +34,22 @@
         cmd: |
           wget https://dl.min.io/client/mc/release/linux-amd64/mc
           chmod +x mc
-          ./mc alias set minio https://swift.services.a.regiocloud.tech {{ minio.MINIO_ACCESS_KEY | trim }} {{ minio.MINIO_SECRET_KEY | trim }}
+          ./mc alias set minio https://swift.services.a.regiocloud.tech {{ secret.MINIO_ACCESS_KEY | trim }} {{ secret.MINIO_SECRET_KEY | trim }}
           ./mc cp regiocloud-example-image.qcow2 minio/regiocloud-examples
           ./mc cp regiocloud-example-image.qcow2.CHECKSUM minio/regiocloud-examples
+      when: upload_image|bool
+      no_log: true
+
+    - name: Create image
+      openstack.cloud.image:
+        cloud: "{{ cloud }}"
+        name: "regiocloud-example {{ now(utc=true,fmt='%Y%m%d') }}"
+        container_format: bare
+        disk_format: qcow2
+        state: present
+        filename: "{{ zuul.project.src_dir }}/openstack/images/dib/regiocloud-example-image.qcow2"
+        properties:
+          cpu_arch: x86_64
+          distro: ubuntu
       when: upload_image|bool
       no_log: true

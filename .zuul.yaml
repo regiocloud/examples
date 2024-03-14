@@ -24,6 +24,17 @@
           vXy7p0BJ9lQbHJa8ZxlpW7OFHFN0Z18STWG6BOPOgpuxq8t5MyfKXCFf9Uz8u9BWHeOO7
           CyBNlnEmrED0GmTR1guwhT1zekYK/ZzDAsEmu5iE9EotxGvdsFzD3ZJrIa/QiPd2z3Jd7
           siRCV8syZaLR2ta+sjyfyZGQmaE4IrS3adHGPSu7BZvNOrygYiEN4g4GZei/Us=
+      CLOUDS: !encrypted/pkcs1-oaep
+        - vbP/w8tWa0ydIkvPeMvirEJ6V+UZoh50XLf2+XEACMx5WMmkqo+J4D3al/EeqUNvI65eL
+          OFEzcHztn2+qEjJKS7QZ+lfzTLjTaSlnnqooy0MeMvBxQWds/cNicOezxRH5UO3/pnbMQ
+          kn19zpSYDooRZOhDMlS0HPphc44gzKsURitEOTP9p/W0yQJBs56+HsPfbT0clvMmpymQJ
+          4fajno1fcQ3969PJ8MnqaYbizSxakNjyxxn80DSRr8yVNA1Qo5F6PPLchMfB+iImlGmz8
+          ved97yXhao/WBms4ltCQiwbTr8ge2VtTOB8m5Vqbe0PwhScQSXYpTzn4N4ym+Qle9tuF8
+          +/qQTTfMoDdUzNAR+p9S6LUJ3kcuxx9Ux4IPdH9VsMD+OKy4+Cz77e2hDH0BrmY3v/nS2
+          7ynV6YRar7oSS+g2XQ2ZNFWidpeXmRrfINmtsz5DIi+be1Sb77p7Gf7e3B2iojWlk/XlM
+          /zdhQ3DqKY1ac8E9E1GF3JUhBqBr6j5vRqVnGzujSsxmGi/QCC74qqGiEJRBhqxyRtFvJ
+          J3a8eiLfCjO/Y35J63QCfzEuzVKLHaF9hW5k9j+KNwuz7wUxxBeB2GVxGLvLwYupbE5z8
+          tAw042J4y4gkml4xpVUvQB4hfVTNIZveYHCXDm5bHhIcNtTLJTON5c6jRvWIJQ=
 
 - job:
     name: regiocloud-examples-dib-build
@@ -43,7 +54,7 @@
     vars:
       upload_image: true
     secrets:
-      - name: minio
+      - name: secret
         secret: SECRET_REGIOCLOUD_EXAMPLES
         pass-to-parent: true
 
