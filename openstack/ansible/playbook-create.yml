@@ -6,6 +6,7 @@
 
   vars:
     cloud: openstack
+    image: "Ubuntu 22.04"
 
   tasks:
     - name: Generate an OpenSSH keypair
@@ -85,7 +86,7 @@
         cloud: "{{ cloud }}"
         state: present
         name: test1
-        image: "Ubuntu 22.04"
+        image: "{{ image }}"
         flavor: "SCS-1V-4"
         delete_fip: true
         key_name: test
@@ -106,7 +107,7 @@
         cloud: "{{ cloud }}"
         state: present
         name: test2
-        image: "Ubuntu 22.04"
+        image: "{{ image }}"
         flavor: "SCS-1V-4-10"
         delete_fip: true
         key_name: test
