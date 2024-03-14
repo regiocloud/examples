@@ -52,4 +52,3 @@
           cpu_arch: x86_64
           distro: ubuntu
       when: upload_image|bool
-      no_log: true
