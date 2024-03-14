@@ -19,10 +19,18 @@
           sudo apt-get update
           sudo apt-get install -y lftp kpartx qemu-utils squashfs-tools
 
+    - name: Create /etc/openstack directory if it does not exist
+      become: true
+      ansible.builtin.file:
+        path: /etc/openstack
+        state: directory
+        mode: 0755
+
     - name: Write clouds.yaml file
+      become: true
       ansible.builtin.copy:
         content: "{{ secret.CLOUDS }}"
-        dest: "{{ zuul.project.src_dir }}/clouds.yaml"
-        mode: 0600
+        dest: /etc/openstack/clouds.yaml
+        mode: 0644
       when: upload_image|bool
       no_log: true
