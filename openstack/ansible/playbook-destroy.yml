@@ -1,0 +1,57 @@
+---
+- name: Run destroy play
+  hosts: localhost
+  connection: local
+
+  vars:
+    cloud: openstack
+
+  tasks:
+    - name: Delete test1 instance
+      openstack.cloud.server:
+        cloud: "{{ cloud }}"
+        state: absent
+        name: test1
+
+    - name: Delete test2 instance
+      openstack.cloud.server:
+        cloud: "{{ cloud }}"
+        state: absent
+        name: test2
+
+    - name: Delete test volume
+      openstack.cloud.volume:
+        cloud: "{{ cloud }}"
+        state: absent
+        name: test
+
+    - name: Delete test server group
+      openstack.cloud.server_group:
+        cloud: "{{ cloud }}"
+        state: absent
+        name: test
+      register: result
+
+    - name: Delete test keypair
+      openstack.cloud.keypair:
+        cloud: "{{ cloud }}"
+        state: absent
+        name: test
+
+    - name: Delete test router
+      openstack.cloud.router:
+        cloud: "{{ cloud }}"
+        state: absent
+        name: router-test
+
+    - name: Delete test subnet
+      openstack.cloud.subnet:
+        cloud: "{{ cloud }}"
+        state: absent
+        name: subnet-test
+
+    - name: Delete test network
+      openstack.cloud.network:
+        cloud: "{{ cloud }}"
+        state: absent
+        name: test
