@@ -1,2 +1,2 @@
 diskimage-builder==3.26.0
-openstacksdk==3.0.0
+openstacksdk<=0.98.999
