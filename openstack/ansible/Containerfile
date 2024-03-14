@@ -1,0 +1,25 @@
+# docker build --progress=plain -t ansible .
+# docker run --rm -it ansible bash
+
+FROM ubuntu:22.04
+
+COPY . /src
+
+RUN <<EOF
+apt-get update
+apt-get install --yes --no-install-recommends \
+  build-essential \
+  python3-pip \
+  python3-dev
+python3 -m pip install --no-cache-dir --upgrade 'pip==24.0'
+python3 -m pip install --no-cache-dir -r /src/requirements.txt
+ansible-galaxy collection install -r /src/requirements.yml
+apt-get remove --yes \
+  build-essential
+apt-get clean
+rm -rf \
+  /var/lib/apt/lists/* \
+  /var/tmp/*
+EOF
+
+WORKDIR /src
