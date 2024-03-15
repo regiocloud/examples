@@ -8,6 +8,12 @@
     image: "Ubuntu 22.04"
 
   tasks:
+    - name: Generate an OpenSSH keypair
+      community.crypto.openssh_keypair:
+        path: id_rsa.test
+      when:
+        - zuul is defined
+
     - name: Create test network
       openstack.cloud.network:
         cloud: "{{ cloud }}"
