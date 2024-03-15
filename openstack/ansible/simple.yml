@@ -33,7 +33,8 @@
         cloud: "{{ cloud }}"
         state: present
         name: router-test
-        network: public
+        external_gateway_info:
+          network: public
         interfaces:
           - subnet-test
 
