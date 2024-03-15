@@ -1,8 +1,7 @@
 # https://docs.ansible.com/ansible/latest/collections/openstack/cloud/index.html
 ---
 - name: Run destroy play
-  hosts: localhost
-  connection: local
+  hosts: all
 
   vars:
     cloud: openstack
