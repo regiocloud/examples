@@ -61,7 +61,7 @@
 - job:
     name: regiocloud-examples-os-ansible
     pre-run: openstack/ansible/pre.yml
-    run: openstack/ansible/create.yml
+    run: openstack/ansible/simple.yml
     files:
       - '^.zuul.yaml$'
       - '^openstack\/ansible\/.*$'

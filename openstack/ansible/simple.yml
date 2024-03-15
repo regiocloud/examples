@@ -1,0 +1,131 @@
+# https://docs.ansible.com/ansible/latest/collections/openstack/cloud/index.html
+---
+- name: Run create play
+  hosts: all
+
+  vars:
+    cloud: openstack
+    image: "Ubuntu 22.04"
+
+  tasks:
+    - name: Generate an OpenSSH keypair
+      community.crypto.openssh_keypair:
+        path: id_rsa.test
+      when:
+        - zuul is defined
+
+    - name: Create test network
+      openstack.cloud.network:
+        cloud: "{{ cloud }}"
+        state: present
+        name: test
+
+    - name: Create test subnet
+      openstack.cloud.subnet:
+        cloud: "{{ cloud }}"
+        state: present
+        name: subnet-test
+        network_name: test
+        cidr: 192.168.200.0/24
+
+    - name: Create test router
+      openstack.cloud.router:
+        cloud: "{{ cloud }}"
+        state: present
+        name: router-test
+        network: public
+        interfaces:
+          - subnet-test
+
+    - name: Create ssh security group
+      openstack.cloud.security_group:
+        cloud: "{{ cloud }}"
+        state: present
+        name: ssh
+
+    - name: Add rule to ssh security group
+      openstack.cloud.security_group_rule:
+        cloud: "{{ cloud }}"
+        state: present
+        security_group: ssh
+        protocol: tcp
+        port_range_min: 22
+        port_range_max: 22
+        remote_ip_prefix: 0.0.0.0/0
+
+    - name: Create icmp security group
+      openstack.cloud.security_group:
+        cloud: "{{ cloud }}"
+        state: present
+        name: icmp
+
+    - name: Add rule to icmp security group
+      openstack.cloud.security_group_rule:
+        cloud: "{{ cloud }}"
+        state: present
+        security_group: icmp
+        protocol: icmp
+        remote_ip_prefix: 0.0.0.0/0
+
+    - name: Create test keypair
+      openstack.cloud.keypair:
+        cloud: "{{ cloud }}"
+        state: present
+        name: test
+        public_key_file: id_rsa.test.pub
+
+    - name: Create test instance
+      openstack.cloud.server:
+        cloud: "{{ cloud }}"
+        state: present
+        name: test
+        image: "{{ image }}"
+        flavor: "SCS-1V-4"
+        delete_fip: true
+        key_name: test
+        security_groups:
+          - icmp
+          - ssh
+        network: test
+        boot_from_volume: true
+        terminate_volume: true
+        volume_size: 8
+      tags:
+        - test-server
+
+    - name: Create test volume
+      openstack.cloud.volume:
+        cloud: "{{ cloud }}"
+        state: present
+        name: test
+        size: 1
+      tags:
+        - test-server
+        - test-volume
+
+    - name: Attach test volume
+      openstack.cloud.server_volume:
+        cloud: "{{ cloud }}"
+        state: present
+        server: test
+        volume: test
+      tags:
+        - test-server
+        - test-volume
+
+    - name: Create floating ip address
+      openstack.cloud.floating_ip:
+        cloud: "{{ cloud }}"
+        state: present
+        server: test
+        network: public
+        wait: true
+      register: result
+      tags:
+        - test-server
+
+    - name: Print floating ip address
+      ansible.builtin.debug:
+        msg: "{{ result.floating_ip.floating_ip_address }}"
+      tags:
+        - test-server
