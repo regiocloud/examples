@@ -1,0 +1,32 @@
+---
+- name: Pre
+  hosts: all
+
+  roles:
+    - ensure-pip
+
+  tasks:
+    - name: Run install script
+      ansible.builtin.shell:
+        executable: /bin/bash
+        chdir: "{{ zuul.project.src_dir }}/openstack/ansible/requirements.txt"
+        cmd: |
+          set -e
+          set -x
+
+          sudo pip3 install 'openstacksdk<=0.98.999'
+
+    - name: Create /etc/openstack directory if it does not exist
+      become: true
+      ansible.builtin.file:
+        path: /etc/openstack
+        state: directory
+        mode: 0755
+
+    - name: Write clouds.yaml file
+      become: true
+      ansible.builtin.copy:
+        content: "{{ secret.CLOUDS }}"
+        dest: /etc/openstack/clouds.yaml
+        mode: 0644
+      no_log: true

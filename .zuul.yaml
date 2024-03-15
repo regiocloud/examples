@@ -58,6 +58,17 @@
         secret: SECRET_REGIOCLOUD_EXAMPLES
         pass-to-parent: true
 
+- job:
+    name: regiocloud-examples-os-ansible
+    pre-run: openstack/ansible/pre.yml
+    run: openstack/ansible/create.yml
+    files:
+      - '^.zuul.yaml$'
+      - '^openstack\/ansible\/.*$'
+    secrets:
+      - name: secret
+        secret: SECRET_REGIOCLOUD_EXAMPLES
+
 - project:
     merge-mode: squash-merge
     default-branch: main
@@ -67,4 +78,6 @@
     post:
       jobs:
         - regiocloud-examples-dib-publish:
+            branches: main
+        - regiocloud-examples-os-ansible:
             branches: main
