@@ -13,7 +13,7 @@
           set -e
           set -x
 
-          sudo pip3 install 'openstacksdk<=0.98.999'
+          sudo pip3 install openstacksdk
 
     - name: Create /etc/openstack directory if it does not exist
       become: true
