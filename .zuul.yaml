@@ -62,7 +62,6 @@
     name: regiocloud-examples-os-ansible
     pre-run: openstack/ansible/pre.yml
     run: openstack/ansible/simple.yml
-    ansible-version: 8
     files:
       - '^.zuul.yaml$'
       - '^openstack\/ansible\/.*$'
